@@ -1,0 +1,44 @@
+---
+import '../styles/global.css';
+import { SITE } from '../site';
+interface Props { title?: string; description?: string; image?: string; jsonld?: object[] }
+const { title, description = SITE.description, image = '/og.svg', jsonld = [] } = Astro.props;
+const fullTitle = title ? `${title} | ${SITE.name}` : `${SITE.name} — ${SITE.tagline}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{fullTitle}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <link rel="alternate" type="application/rss+xml" title={SITE.name} href="/rss.xml" />
+  <link rel="sitemap" href="/sitemap-index.xml" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <meta property="og:type" content={jsonld.length ? 'article' : 'website'} />
+  <meta property="og:title" content={fullTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={new URL(image, Astro.site)} />
+  <meta property="og:locale" content="ko_KR" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  {SITE.adsenseClient && <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${SITE.adsenseClient}`} crossorigin="anonymous"></script>}
+  {jsonld.map((j) => <script type="application/ld+json" set:html={JSON.stringify(j)} />)}
+</head>
+<body>
+  <a class="skip" href="#main">본문 바로가기</a>
+  <header class="site"><div class="wrap">
+    <a class="brand" href="/">AI 소식 <span>정리</span></a>
+    <nav><a href="/">소식</a><a href="/about/">발행 원칙</a><a href="/rss.xml">RSS</a></nav>
+  </div></header>
+  <main id="main" class="wrap"><slot /></main>
+  <footer class="site"><div class="wrap">
+    <p><strong>{SITE.name}</strong> · 공식 발표를 한국어로, 원문 출처와 함께.</p>
+    <p><a href="/about/">발행 원칙</a><a href="/privacy/">개인정보 및 광고 안내</a><a href="/rss.xml">RSS</a></p>
+    <p>모든 글은 AI가 공식 자료를 바탕으로 작성한 콘텐츠이며, 각 글에 원문 출처를 표기합니다.</p>
+  </div></footer>
+</body>
+</html>

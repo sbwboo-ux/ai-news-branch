@@ -1,0 +1,12 @@
+---
+import { fmtDate } from '../site';
+const { a } = Astro.props;
+---
+<article class="card">
+  <a href={`/articles/${a.id}/`} tabindex="-1"><img src={a.data.image} alt={`${a.data.title} 설명용 일러스트`} loading="lazy" width="400" height="225" /></a>
+  <div class="body">
+    <div class="meta"><b>{a.data.category}</b> · {a.data.topic} · <time datetime={a.data.date.toISOString()}>{fmtDate(a.data.date)}</time></div>
+    <h2><a href={`/articles/${a.id}/`}>{a.data.title}</a></h2>
+    <p>{a.data.description}</p>
+  </div>
+</article>

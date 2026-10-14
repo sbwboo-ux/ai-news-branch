@@ -1,0 +1,39 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Ad from '../../components/Ad.astro';
+import { allArticles } from '../../lib';
+import { SITE, fmtDate } from '../../site';
+export async function getStaticPaths() {
+  return (await allArticles()).map((a) => ({ params: { slug: a.id }, props: { a } }));
+}
+const { a } = Astro.props;
+const { Content } = await render(a);
+const d = a.data;
+const url = new URL(Astro.url.pathname, Astro.site).href;
+const jsonld: object[] = [{
+  '@context': 'https://schema.org', '@type': 'NewsArticle', headline: d.title, description: d.description,
+  datePublished: d.date.toISOString(), dateModified: d.date.toISOString(), inLanguage: 'ko-KR',
+  image: [new URL(d.image, Astro.site).href], mainEntityOfPage: url, articleSection: d.category,
+  author: { '@type': 'Organization', name: SITE.name }, publisher: { '@type': 'Organization', name: SITE.name },
+  citation: d.sources.map((s) => ({ '@type': 'CreativeWork', name: s.title, url: s.url, publisher: s.publisher })),
+}];
+if (d.faq.length) jsonld.push({ '@context': 'https://schema.org', '@type': 'FAQPage',
+  mainEntity: d.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) });
+---
+<Base title={d.title} description={d.description} image={d.image} jsonld={jsonld}>
+  <article class="post">
+    <div class="meta"><b>{d.category}</b> · {d.topic} · <time datetime={d.date.toISOString()}>{fmtDate(d.date)}</time></div>
+    <h1>{d.title}</h1>
+    <p class="lead">{d.description}</p>
+    <img class="cover" src={d.image} alt={`${d.title} 설명용 일러스트`} width="1200" height="675" />
+    <p class="caption">설명용 일러스트 · 실제 사진 아님</p>
+    <div class="prose"><Content /></div>
+    <Ad />
+    {d.faq.length > 0 && <section><h2>자주 묻는 질문</h2>{d.faq.map((f) => <details><summary>{f.q}</summary><p>{f.a}</p></details>)}</section>}
+    <section><h2>원문 출처</h2><ul class="sources">
+      {d.sources.map((s) => <li><a href={s.url} rel="noopener" target="_blank">{s.title}</a> — {s.publisher}{s.date && ` · ${s.date}`}</li>)}
+    </ul></section>
+    <p class="notice">이 글은 AI가 위 공식 자료를 바탕으로 작성한 요약·해설입니다. 세부 내용과 최신 변경 사항은 원문에서 확인해 주세요.</p>
+  </article>
+</Base>

@@ -1,0 +1,24 @@
+---
+import Base from '../layouts/Base.astro';
+import Card from '../components/Card.astro';
+import Ad from '../components/Ad.astro';
+import { allArticles } from '../lib';
+import { CATEGORIES } from '../content.config';
+import { SITE } from '../site';
+const list = await allArticles();
+const jsonld = [{ '@context': 'https://schema.org', '@type': 'WebSite', name: SITE.name, url: Astro.site?.href, description: SITE.description, inLanguage: 'ko-KR' }];
+---
+<Base jsonld={jsonld}>
+  <section class="hero">
+    <h1>{SITE.tagline}</h1>
+    <p>OpenAI, Google DeepMind, NVIDIA, Hugging Face 등 공식 발표만 골라 한국어로 정리합니다. 모든 글에 발표일과 원문 링크를 붙입니다.</p>
+  </section>
+  <div class="chips" role="navigation" aria-label="카테고리">
+    <a href="/" aria-current="page">전체</a>
+    {CATEGORIES.map((c) => <a href={`/category/${c}/`}>{c}</a>)}
+  </div>
+  <div class="cards">
+    {list.map((a, i) => <>{i === 3 && <Ad />}<Card a={a} /></>)}
+    {list.length === 0 && <p>첫 소식을 준비하고 있습니다.</p>}
+  </div>
+</Base>

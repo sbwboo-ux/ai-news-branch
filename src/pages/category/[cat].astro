@@ -1,0 +1,14 @@
+---
+import Base from '../../layouts/Base.astro';
+import Card from '../../components/Card.astro';
+import { allArticles } from '../../lib';
+import { CATEGORIES } from '../../content.config';
+export function getStaticPaths() { return CATEGORIES.map((cat) => ({ params: { cat } })); }
+const { cat } = Astro.params;
+const list = (await allArticles()).filter((a) => a.data.category === cat);
+---
+<Base title={`${cat} 소식`} description={`AI ${cat} 관련 공식 발표를 한국어로 정리한 글 모음입니다.`}>
+  <section class="hero"><h1>{cat} 소식</h1><p>AI {cat} 분야의 공식 발표 정리 {list.length}편</p></section>
+  <div class="chips"><a href="/">전체</a>{CATEGORIES.map((c) => <a href={`/category/${c}/`} aria-current={c === cat ? 'page' : undefined}>{c}</a>)}</div>
+  <div class="cards">{list.map((a) => <Card a={a} />)}{list.length === 0 && <p>아직 이 분류의 글이 없습니다.</p>}</div>
+</Base>

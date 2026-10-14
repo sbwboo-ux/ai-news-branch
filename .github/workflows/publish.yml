@@ -1,0 +1,36 @@
+name: publish
+on:
+  schedule:
+    - cron: '0 0,6,12 * * *' # KST 9시, 15시, 21시
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  models: read
+
+concurrency: publish
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: node scripts/publish.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          LLM_BASE_URL: ${{ vars.LLM_BASE_URL }}
+          LLM_MODEL: ${{ vars.LLM_MODEL }}
+      # 글이 깨졌으면 커밋하지 않는다
+      - run: npm run build
+      - name: commit
+        run: |
+          git config user.name "ai-news-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A src/content public/images data
+          git diff --cached --quiet || (git commit -m "publish: $(date -u +%F' '%H:%M)" && git push)
