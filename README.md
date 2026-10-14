@@ -4,7 +4,7 @@
 
 - 사이트: Astro 정적 빌드 → Cloudflare Pages(무료)
 - 자동 발행: GitHub Actions cron (KST 9시·15시·21시) → `scripts/publish.mjs`
-- 글쓰기 AI: GitHub Models(무료, Actions의 `GITHUB_TOKEN`으로 호출)
+- 글쓰기 AI: Google Gemini API 무료 키 (OpenAI 호환 주소로 호출)
 - 글이 커밋되면 Cloudflare Pages가 자동으로 다시 빌드·배포합니다.
 
 ## 로컬 명령
@@ -21,7 +21,8 @@ node scripts/publish.mjs --dry   # 새 발표 수집만 확인 (AI 호출 없음
 2. Cloudflare 대시보드 → Workers & Pages → Pages → Git 연결 → 이 저장소 선택.
    - Build command: `npm run build`, Output: `dist`
    - 환경변수 `SITE_URL` = 배포된 주소 (예: `https://ai-news-branch.pages.dev`)
-3. GitHub 저장소 → Actions 탭 → publish → Run workflow 로 첫 실행을 확인합니다.
+3. https://aistudio.google.com/apikey 에서 무료 API 키를 만들고, 저장소 Settings → Secrets → Actions 에 `LLM_API_KEY`로 넣습니다.
+4. GitHub 저장소 → Actions 탭 → publish → Run workflow 로 첫 실행을 확인합니다.
 
 ## 애드센스 붙이기 (승인 후)
 
@@ -37,5 +38,5 @@ AI 검색용 요약은 `/llms.txt`에 자동 생성됩니다.
 
 ## 선택 설정
 
-- 다른 OpenAI 호환 API를 쓰려면 저장소 Secrets에 `LLM_API_KEY`, Variables에 `LLM_BASE_URL`, `LLM_MODEL`을 넣습니다.
+- 다른 OpenAI 호환 API를 쓰려면 Variables에 `LLM_BASE_URL`, `LLM_MODEL`(쉼표로 여러 개, 앞에서부터 시도)을 넣습니다.
 - 수집 피드·발행 규칙은 `scripts/publish.mjs` 위쪽 상수에서 바꿉니다.

@@ -17,9 +17,10 @@ const FEEDS = [
 ];
 const CATEGORIES = ['모델', '제품', '연구', '산업'];
 const LLM = {
-  base: process.env.LLM_BASE_URL || 'https://models.github.ai/inference',
-  key: process.env.LLM_API_KEY || process.env.GITHUB_TOKEN,
-  models: (process.env.LLM_MODEL || 'openai/gpt-4.1,openai/gpt-4.1-mini').split(','),
+  // 기본값: Google Gemini 무료 키 (OpenAI 호환 주소). GitHub Models는 2026-07-30 종료됨
+  base: process.env.LLM_BASE_URL || 'https://generativelanguage.googleapis.com/v1beta/openai',
+  key: process.env.LLM_API_KEY,
+  models: (process.env.LLM_MODEL || 'gemini-flash-latest,gemini-2.5-flash,gemini-2.5-flash-lite').split(','),
 };
 const UA = { 'User-Agent': 'Mozilla/5.0 (compatible; ai-news-bot/1.0)' };
 const SEEN_FILE = 'data/seen.json';
@@ -146,7 +147,7 @@ if (!chosen.length) { console.log('새 공식 발표가 없어 건너뜀'); proc
 
 for (const c of chosen) c.body = await pageText(c.url);
 if (DRY) { chosen.forEach((c) => console.log(`   body ${c.body.length}자: ${c.body.slice(0, 120)}`)); process.exit(0); }
-if (!LLM.key) throw new Error('LLM_API_KEY 또는 GITHUB_TOKEN 이 필요합니다');
+if (!LLM.key) throw new Error('LLM_API_KEY 가 필요합니다 (Google AI Studio 무료 키)');
 
 const art = await writeArticle(chosen);
 const kst = new Date(now.getTime() + 9 * 36e5).toISOString();

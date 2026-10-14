@@ -6,7 +6,6 @@ on:
 
 permissions:
   contents: write
-  models: read
 
 concurrency: publish
 
@@ -22,7 +21,6 @@ jobs:
       - run: npm ci
       - run: node scripts/publish.mjs
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
           LLM_BASE_URL: ${{ vars.LLM_BASE_URL }}
           LLM_MODEL: ${{ vars.LLM_MODEL }}
