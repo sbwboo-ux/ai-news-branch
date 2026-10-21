@@ -22,7 +22,8 @@ const LLM = {
   key: process.env.LLM_API_KEY,
   models: (process.env.LLM_MODEL || 'gemini-flash-latest,gemini-2.5-flash,gemini-2.5-flash-lite').split(','),
 };
-const UA = { 'User-Agent': 'Mozilla/5.0 (compatible; ai-news-bot/1.0)' };
+// 봇 이름이 들어간 UA는 openai.com 이 403으로 막는다
+const UA = { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36' };
 const SEEN_FILE = 'data/seen.json';
 
 const seen = new Set(fs.existsSync(SEEN_FILE) ? JSON.parse(fs.readFileSync(SEEN_FILE, 'utf8')) : []);
@@ -48,7 +49,9 @@ async function readFeed([publisher, url]) {
 
 async function pageText(url) {
   try {
-    const html = await (await fetch(url, { headers: UA, signal: AbortSignal.timeout(20000) })).text();
+    const res = await fetch(url, { headers: UA, signal: AbortSignal.timeout(20000) });
+    if (!res.ok) return ''; // 차단 페이지 글자를 본문으로 넘기지 않는다
+    const html = await res.text();
     return html
       .replace(/<(script|style|nav|footer|header|svg)[\s\S]*?<\/\1>/gi, ' ')
       .replace(/<[^>]+>/g, ' ')
@@ -58,13 +61,6 @@ async function pageText(url) {
   } catch {
     return '';
   }
-}
-
-// 발행처가 겹치지 않게 최신순으로 고른다
-function pick(items) {
-  const out = [];
-  for (const it of items) if (out.length < MAX_ITEMS && !out.some((o) => o.publisher === it.publisher)) out.push(it);
-  return out;
 }
 
 const SYSTEM = `너는 한국어 AI 뉴스 블로그의 편집자다. 주어진 공식 발표 원문만 근거로 한국어 해설 기사 1편을 쓴다.
@@ -140,12 +136,19 @@ const cutoff = now - MAX_AGE_DAYS * 864e5;
 const all = (await Promise.all(FEEDS.map(readFeed))).flat()
   .filter((i) => i.url && i.title && !isNaN(i.date) && i.date >= cutoff && !seen.has(i.url))
   .sort((a, b) => b.date - a.date);
-const chosen = pick(all);
+// 발행처가 겹치지 않게 최신순으로 고르되, 본문을 못 읽은 발표(차단·오류)는 건너뛴다
+const chosen = [];
+for (const it of all) {
+  if (chosen.length >= MAX_ITEMS) break;
+  if (chosen.some((o) => o.publisher === it.publisher)) continue;
+  it.body = await pageText(it.url);
+  if (it.body.length >= 500) chosen.push(it);
+  else console.warn(`skip 본문 ${it.body.length}자: [${it.publisher}] ${it.url}`);
+}
 console.log(`new items: ${all.length}, chosen: ${chosen.length}`);
 chosen.forEach((c) => console.log(` - [${c.publisher}] ${c.title} (${c.date.toISOString().slice(0, 10)})`));
 if (!chosen.length) { console.log('새 공식 발표가 없어 건너뜀'); process.exit(0); }
 
-for (const c of chosen) c.body = await pageText(c.url);
 if (DRY) { chosen.forEach((c) => console.log(`   body ${c.body.length}자: ${c.body.slice(0, 120)}`)); process.exit(0); }
 if (!LLM.key) throw new Error('LLM_API_KEY 가 필요합니다 (Google AI Studio 무료 키)');
 
