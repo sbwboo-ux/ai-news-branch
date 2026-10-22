@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" font-family="Pretendard, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8a4b1f"/><stop offset="1" stop-color="#c47a3a"/></linearGradient></defs>
+<rect width="1200" height="675" fill="url(#g)"/><circle cx="1050" cy="120" r="220" fill="#fff" opacity=".07"/><circle cx="1120" cy="560" r="150" fill="#fff" opacity=".06"/>
+<text x="80" y="170" font-size="34" font-weight="700" fill="#fff" opacity=".85">산업 · 엔터프라이즈AI</text><text x="80" y="300" font-size="62" font-weight="800" fill="#fff">기업 심장부로 들어가는 AI:</text><text x="80" y="378" font-size="62" font-weight="800" fill="#fff">보안·규제·관계형 데이터</text>
+<text x="80" y="620" font-size="26" fill="#fff" opacity=".7">AI 소식 정리 · 설명용 일러스트</text></svg>

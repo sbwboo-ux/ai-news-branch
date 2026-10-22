@@ -4,5 +4,8 @@
  "https://huggingface.co/blog/LiquidAI/lfm25-24b-a2b",
  "https://huggingface.co/blog/nvidia/kumo-forecast",
  "https://openai.com/index/openai-models-google-cloud",
- "https://blogs.nvidia.com/blog/local-ai-gtc-rtx-dgx-spark-station-sync/"
+ "https://blogs.nvidia.com/blog/local-ai-gtc-rtx-dgx-spark-station-sync/",
+ "https://aws.amazon.com/blogs/machine-learning/securing-quick-access-from-corporate-networks-with-aws-privatelink/",
+ "https://openai.com/index/broad-access-through-consistent-standards",
+ "https://huggingface.co/blog/nvidia/kumo-relational"
 ]
