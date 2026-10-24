@@ -13,5 +13,8 @@
  "https://huggingface.co/blog/microsoft/thinkingbox-training",
  "https://aws.amazon.com/blogs/machine-learning/multi-turn-reinforcement-learning-on-amazon-sagemaker-ai-a-hands-on-guide/",
  "https://openai.com/index/scaling-storage-one-billion-users-part-two",
- "https://huggingface.co/blog/allenai/litpivot"
+ "https://huggingface.co/blog/allenai/litpivot",
+ "https://aws.amazon.com/blogs/machine-learning/orchestrating-sagemaker-ai-endpoint-auto-scaling-with-aws-cdk/",
+ "https://openai.com/index/securing-our-frontier-model-training-environment",
+ "https://huggingface.co/blog/torch-neuronx-model-support"
 ]
