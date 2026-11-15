@@ -43,5 +43,8 @@
  "https://huggingface.co/blog/allenai/toyblocks",
  "https://openai.com/index/gilbert-tobin-sam-nickless",
  "https://blogs.nvidia.com/blog/ai-recycling-startups/",
- "https://aws.amazon.com/blogs/machine-learning/introducing-kimi-k3-1-pro-on-amazon-bedrock/"
+ "https://aws.amazon.com/blogs/machine-learning/introducing-kimi-k3-1-pro-on-amazon-bedrock/",
+ "https://aws.amazon.com/blogs/machine-learning/production-mlops-at-gs-caltex-with-amazon-sagemaker-canvas-part-1/",
+ "https://huggingface.co/blog/nvidia/simready-assets-robot-pick-and-place",
+ "https://openai.com/index/introducing-chatgpt-wallet"
 ]
