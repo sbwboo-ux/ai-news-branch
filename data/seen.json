@@ -46,5 +46,8 @@
  "https://aws.amazon.com/blogs/machine-learning/introducing-kimi-k3-1-pro-on-amazon-bedrock/",
  "https://aws.amazon.com/blogs/machine-learning/production-mlops-at-gs-caltex-with-amazon-sagemaker-canvas-part-1/",
  "https://huggingface.co/blog/nvidia/simready-assets-robot-pick-and-place",
- "https://openai.com/index/introducing-chatgpt-wallet"
+ "https://openai.com/index/introducing-chatgpt-wallet",
+ "https://blogs.nvidia.com/blog/ai-day-seoul-wrapup/",
+ "https://openai.com/index/step-toward-defining-the-standard-model",
+ "https://aws.amazon.com/blogs/machine-learning/route-coding-agent-requests-to-the-right-model-on-amazon-bedrock-with-nvidia-nemo-switchyard/"
 ]
