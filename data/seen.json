@@ -49,5 +49,8 @@
  "https://openai.com/index/introducing-chatgpt-wallet",
  "https://blogs.nvidia.com/blog/ai-day-seoul-wrapup/",
  "https://openai.com/index/step-toward-defining-the-standard-model",
- "https://aws.amazon.com/blogs/machine-learning/route-coding-agent-requests-to-the-right-model-on-amazon-bedrock-with-nvidia-nemo-switchyard/"
+ "https://aws.amazon.com/blogs/machine-learning/route-coding-agent-requests-to-the-right-model-on-amazon-bedrock-with-nvidia-nemo-switchyard/",
+ "https://aws.amazon.com/blogs/machine-learning/full-fine-tuning-fft-on-sagemaker-ai-serverless-model-customization/",
+ "https://deepmind.google/blog/introducing-gemini-4-neon/",
+ "https://huggingface.co/blog/RadixArk/daisyrose-27b-pushing-the-frontier-of-post-trainin"
 ]
